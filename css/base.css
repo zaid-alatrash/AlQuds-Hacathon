@@ -1,0 +1,306 @@
+/* ============================================================
+   BASE.CSS — Design Tokens, Reset, Typography
+   Jerusalem Old City Tourist Route App
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700&display=swap');
+
+/* ── CSS Custom Properties ─────────────────────────────── */
+:root {
+  /* Colors */
+  --gold-primary:       #C9973B;
+  --gold-light:         #E8B86D;
+  --gold-dark:          #9A7020;
+  --gold-subtle:        #F5E9C8;
+  --stone-dark:         #1A1208;
+  --stone-medium:       #3D2B0F;
+  --stone-light:        #7A6040;
+  --cream:              #F7F2E8;
+  --cream-dark:         #EDE5D2;
+  --heritage-green:     #2D5A27;
+  --heritage-green-lt:  #3E7A38;
+  --terracotta:         #B85C38;
+  --terracotta-lt:      #D47050;
+  --sky-blue:           #4A90B8;
+  --white:              #FFFFFF;
+  --surface:            #FFFDF8;
+  --surface-elevated:   #FFFFFF;
+  --border:             rgba(201,151,59,0.18);
+  --border-strong:      rgba(201,151,59,0.35);
+
+  /* Text */
+  --text-primary:       #1A1208;
+  --text-secondary:     #5A4A2A;
+  --text-muted:         #8A7555;
+  --text-on-dark:       #F7F2E8;
+  --text-on-gold:       #1A1208;
+
+  /* Shadows */
+  --shadow-sm:    0 2px 8px rgba(26,18,8,0.08);
+  --shadow-md:    0 4px 20px rgba(26,18,8,0.12);
+  --shadow-lg:    0 8px 40px rgba(26,18,8,0.16);
+  --shadow-xl:    0 16px 60px rgba(26,18,8,0.22);
+  --shadow-gold:  0 4px 20px rgba(201,151,59,0.25);
+  --shadow-glow:  0 0 30px rgba(201,151,59,0.20);
+
+  /* Spacing */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* Border Radius */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:   250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Layout */
+  --container-max: 1280px;
+  --nav-height:    68px;
+  --sidebar-width: 380px;
+}
+
+/* ── CSS Reset ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  direction: rtl;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background-color: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img, video {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* ── Typography Scale ──────────────────────────────────── */
+.text-xs   { font-size: 12px; line-height: 1.5; }
+.text-sm   { font-size: 14px; line-height: 1.6; }
+.text-base { font-size: 16px; line-height: 1.7; }
+.text-lg   { font-size: 18px; line-height: 1.65; }
+.text-xl   { font-size: 20px; line-height: 1.6; }
+.text-2xl  { font-size: 24px; line-height: 1.5; }
+.text-3xl  { font-size: 30px; line-height: 1.4; }
+.text-4xl  { font-size: 36px; line-height: 1.3; }
+.text-5xl  { font-size: 48px; line-height: 1.2; }
+.text-6xl  { font-size: 60px; line-height: 1.1; }
+
+.font-light    { font-weight: 300; }
+.font-regular  { font-weight: 400; }
+.font-medium   { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold     { font-weight: 700; }
+.font-extrabold{ font-weight: 800; }
+.font-black    { font-weight: 900; }
+
+/* ── Color Utilities ───────────────────────────────────── */
+.text-gold      { color: var(--gold-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted     { color: var(--text-muted); }
+.text-white     { color: var(--white); }
+.text-cream     { color: var(--cream); }
+.text-green     { color: var(--heritage-green); }
+.text-terracotta{ color: var(--terracotta); }
+
+/* ── Gradient Text ─────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light), var(--terracotta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Layout Utilities ──────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.flex        { display: flex; }
+.flex-col    { flex-direction: column; }
+.items-center{ align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center  { justify-content: center; }
+.gap-2  { gap: var(--space-2); }
+.gap-3  { gap: var(--space-3); }
+.gap-4  { gap: var(--space-4); }
+.gap-6  { gap: var(--space-6); }
+.gap-8  { gap: var(--space-8); }
+.flex-wrap   { flex-wrap: wrap; }
+.flex-1      { flex: 1; }
+.w-full      { width: 100%; }
+
+/* ── Keyframe Animations ───────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.4); opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes drawPath {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes markerAppear {
+  from { opacity: 0; transform: scale(0) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Animation Utility Classes ─────────────────────────── */
+.animate-fade-up   { animation: fadeInUp var(--transition-slow) ease both; }
+.animate-fade-in   { animation: fadeIn var(--transition-slow) ease both; }
+.animate-scale-in  { animation: scaleIn var(--transition-slow) ease both; }
+.animate-slide-in  { animation: slideInRight var(--transition-slow) ease both; }
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--cream-dark); }
+::-webkit-scrollbar-thumb  { background: var(--gold-primary); border-radius: 3px; }
+
+/* ── Page transitions ───────────────────────────────────── */
+#app-root {
+  min-height: 100vh;
+}
+
+.page-enter {
+  animation: fadeInUp 350ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── Glassmorphism base ─────────────────────────────────── */
+.glass {
+  background: rgba(255,253,248,0.75);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(201,151,59,0.15);
+}
+
+.glass-dark {
+  background: rgba(26,18,8,0.65);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid rgba(201,151,59,0.2);
+}
+
+/* ── Skeleton loading ──────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--cream-dark) 25%,
+    var(--cream) 50%,
+    var(--cream-dark) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ── Hide on mobile / desktop ───────────────────────────── */
+@media (max-width: 768px) { .hide-mobile { display: none !important; } }
+@media (min-width: 769px) { .hide-desktop { display: none !important; } }

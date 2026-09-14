@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description"
+        content="دليلي — خدمة تخطيط جولات سياحية مخصصة في البلدة القديمة من القدس. اختر اهتماماتك وأوقاتك وميزانيتك واحصل على مسار يومي احترافي."/>
+  <meta name="theme-color" content="#1A1208"/>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="دليلي — جولاتك المخصصة في القدس"/>
+  <meta property="og:description" content="خطط لرحلتك في البلدة القديمة من القدس بمساعدة الذكاء الاصطناعي"/>
+  <meta property="og:type" content="website"/>
+
+  <title>دليلي — جولاتك المخصصة في القدس</title>
+
+  <!-- Google Fonts: Cairo & Tajawal (Arabic-optimized) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700&display=swap"
+        rel="stylesheet"/>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <link rel="stylesheet" href="css/pages.css"/>
+
+  <!-- Inline critical styles for map animation -->
+  <style>
+    /* Map SVG path animation — declared globally so SVG can reference it */
+    @keyframes drawPath {
+      from { stroke-dashoffset: 1000; stroke-dasharray: 1000; }
+      to   { stroke-dashoffset: 0;    stroke-dasharray: 1000; }
+    }
+    @keyframes markerAppear {
+      from { opacity: 0; transform: scale(0) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Loading screen */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: #1A1208;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 9999;
+      transition: opacity 400ms ease, visibility 400ms ease;
+    }
+    #splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .splash-logo {
+      font-size: 48px;
+      animation: float 2s ease-in-out infinite;
+    }
+    .splash-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #C9973B;
+    }
+    .splash-sub {
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      color: rgba(247,242,232,0.5);
+    }
+    .splash-bar {
+      width: 180px;
+      height: 3px;
+      background: rgba(201,151,59,0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .splash-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #C9973B, #E8B86D);
+      border-radius: 2px;
+      animation: splashLoad 1s ease forwards;
+    }
+    @keyframes splashLoad {
+      from { width: 0; }
+      to   { width: 100%; }
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Splash / Loading Screen -->
+  <div id="splash" role="status" aria-label="جارٍ التحميل">
+    <div class="splash-logo">🗺️</div>
+    <div class="splash-title">دليلي</div>
+    <div class="splash-sub">القدس — البلدة القديمة</div>
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  </div>
+
+  <!-- SPA Root -->
+  <main id="app-root" role="main"></main>
+
+  <!-- Google Maps API Key configuration -->
+  <script>
+    window.GOOGLE_MAPS_API_KEY = window.GOOGLE_MAPS_API_KEY || "";
+    if (window.GOOGLE_MAPS_API_KEY) {
+      var mapScript = document.createElement('script');
+      mapScript.src = "https://maps.googleapis.com/maps/api/js?key=" + window.GOOGLE_MAPS_API_KEY + "&libraries=places";
+      mapScript.async = true;
+      document.head.appendChild(mapScript);
+    }
+  </script>
+
+  <!-- JavaScript — load order matters -->
+  <!-- 1. Mock data (itineraries, AI responses, map paths) -->
+  <script src="js/data/mock.js"></script>
+
+  <!-- 2. API client — fetches place data from FastAPI backend -->
+  <script src="js/data/api.js"></script>
+
+  <!-- 3. Router (no dependencies) -->
+  <script src="js/router.js"></script>
+
+  <!-- 4. Pages (depend on mock data + API client) -->
+  <script src="js/pages/home.js"></script>
+  <script src="js/pages/setup.js"></script>
+  <script src="js/pages/route.js"></script>
+  <script src="js/pages/place.js"></script>
+
+  <!-- 5. App bootstrap (sets API_BASE, initializes router) -->
+  <script src="js/app.js"></script>
+
+  <!-- 5. Dismiss splash after fonts + initial render -->
+  <script>
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        var splash = document.getElementById('splash');
+        if (splash) splash.classList.add('hidden');
+      }, 900);
+    });
+  </script>
+
+  <!-- 6. API Connectivity Check — shows a dev status banner -->
+  <script>
+    (function () {
+      // Create status toast element
+      var toast = document.createElement('div');
+      toast.id = 'api-status-toast';
+      toast.style.cssText = [
+        'position:fixed', 'bottom:20px', 'left:50%', 'transform:translateX(-50%)',
+        'padding:10px 20px', 'border-radius:30px', 'font-family:Cairo,sans-serif',
+        'font-size:13px', 'font-weight:700', 'z-index:9998',
+        'box-shadow:0 4px 20px rgba(0,0,0,0.2)', 'display:flex',
+        'align-items:center', 'gap:8px', 'opacity:0',
+        'transition:opacity 0.4s ease', 'white-space:nowrap',
+        'pointer-events:none',
+      ].join(';');
+      document.body.appendChild(toast);
+
+      function showToast(ok) {
+        if (ok) {
+          toast.style.background = 'rgba(16,185,129,0.95)';
+          toast.style.color = '#fff';
+          toast.innerHTML = '✅ الـ backend متصل — البيانات من FastAPI';
+        } else {
+          toast.style.background = 'rgba(245,158,11,0.95)';
+          toast.style.color = '#fff';
+          toast.innerHTML = '⚠️ الـ backend غير متصل — يعمل بالبيانات التجريبية';
+        }
+        toast.style.opacity = '1';
+        setTimeout(function () { toast.style.opacity = '0'; }, 5000);
+      }
+
+      // Run check after page is ready
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          if (window.PlacesAPI) {
+            PlacesAPI.isReachable().then(showToast);
+          }
+        }, 1200);
+      });
+    })();
+  </script>
+
+</body>
+</html>
